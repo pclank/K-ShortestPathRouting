@@ -4,6 +4,13 @@ import numpy as np
 import sys
 
 
+# Define Tester Function for Printing Results
+
+def testPrint(distance):
+    for v in range(vertices):
+        print("\nDistance from %d is: %d" %(v, distance[v]))
+
+
 # Define Distance Helper Function for Finding Closest Vertex
 
 def minDistanceCalc(vertices, distance, shortest_path_list):
