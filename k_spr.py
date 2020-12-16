@@ -27,6 +27,31 @@ def minDistanceCalc(vertices, distance, shortest_path_list):
     return minimum_index
 
 
+# Define Path Building Helper Function
+
+def buildPath(src, parent, vertices):
+    # Initialize List of Lists Containing Paths
+    path_list = [[] for _ in range(vertices)]
+
+    # For Every Target Vertex
+
+    for v in range(vertices):
+        # v Isn't Source
+        if v != src:
+            # u as First Parent
+            u = parent[v]
+
+            # While Parent Is Not the Source Vertex
+            while u != src:
+                # Add u in the Beginning of the List
+                path_list[v].insert(0, u)
+
+                # Update u
+                u = parent[u]
+
+    return path_list
+
+
 # Define Dijkstra Function
 
 def dijkstra(mat, vertices, src):
@@ -35,7 +60,7 @@ def dijkstra(mat, vertices, src):
     shortest_path_list = [False] * vertices  # List of Size mat With Default False Values
     distance = [sys.maxsize] * vertices  # List of Size mat With Default INT_MAX Values
     distance[src] = 0  # Set src Distance to Zero
-    path_list = [[] for _ in range(vertices)]  # List of Paths from Source to All Vertices
+    parent = [*range(vertices)]  # List of Paths from Source to All Vertices
 
     for cnt in range(vertices):
         # Find Closest Vertex Not Processed
@@ -49,7 +74,9 @@ def dijkstra(mat, vertices, src):
         for v in range(vertices):
             if mat[u, v] > 0 and shortest_path_list[v] == False and distance[v] > (distance[u] + mat[u, v]):
                 distance[v] = distance[u] + mat[u, v]
-                path_list[v].append(u)
+                parent[v] = u
+
+    path_list = buildPath(src, parent, vertices)
 
     return distance, path_list
 
