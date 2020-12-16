@@ -2,7 +2,6 @@
 
 import numpy as np
 import sys
-import math
 
 
 # Define Tester Function for Printing Results
@@ -58,9 +57,9 @@ def dijkstra(mat, vertices, src):
     # Array - List Definitions
 
     shortest_path_list = [False] * vertices  # List of Size mat With Default False Values
-    distance = [sys.maxsize] * vertices  # List of Size mat With Default INT_MAX Values
-    distance[src] = 0  # Set src Distance to Zero
-    parent = [*range(vertices)]  # List of Paths from Source to All Vertices
+    distance = [sys.maxsize] * vertices      # List of Size mat With Default INT_MAX Values
+    distance[src] = 0                        # Set src Distance to Zero
+    parent = [*range(vertices)]              # List of Paths from Source to All Vertices
 
     for cnt in range(vertices):
         # Find Closest Vertex Not Processed
@@ -79,6 +78,21 @@ def dijkstra(mat, vertices, src):
     path_list = buildPath(src, parent, vertices)
 
     return distance, path_list
+
+
+# Define Extended Dijkstra Function
+
+def dijkstraExtended(mat, vertices, src, tgt, k):
+    # Array - List Initialization
+
+    path_list = []          # List of Shortest Paths
+    cnt = [0] * vertices    # Counter of Shortest Paths Found for Every Vertex
+    temp_path_list = [[0]]  # List of Temporary Paths
+    cost = [] * vertices    # List of Costs According to Paths in temp_path_list
+
+    while temp_path_list and cnt[tgt] < k:
+        # Get Path Based on Index of Path with Least Cost
+        path = temp_path_list[cost.index(min(cost))]
 
 
 # Define Network Topology as Array - Matrix
@@ -100,14 +114,14 @@ network2 = np.array([[0, 4, 0, 0, 0, 0, 0, 8, 0],
                      ])
 
 # Number of Vertices
-vertices = len(network2)
+vertices = len(network)
 
 # Testing Section
 
 # User Choice Over Source Vertex
 choice = int(input('\nGive Source Vertex for Dijkstra: '))
 
-test_distance, test_path_list = dijkstra(network2, vertices, choice)
+test_distance, test_path_list = dijkstra(network, vertices, choice)
 testPrint(test_distance, test_path_list)
 
 # User Choice Over K Number of Paths
