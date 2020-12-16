@@ -94,6 +94,12 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
         # Get Path Based on Index of Path with Least Cost
         path = temp_path_list[cost.index(min(cost))]
 
+        # Remove path from temp_path_list
+        temp_path_list.remove(path)
+
+        # Increment Counter Variable of path Target
+        cnt[path[-1]] += 1
+
 
 # Define Network Topology as Array - Matrix
 network = np.array([[0, 0, 5, 0, 0],
