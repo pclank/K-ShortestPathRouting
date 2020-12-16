@@ -9,7 +9,7 @@ import math
 
 def testPrint(distance):
     for v in range(vertices):
-        print("\nDistance from %d is: %d" %(v, distance[v]))
+        print("\nDistance from %d is: %d" % (v, distance[v]))
 
 
 # Define Distance Helper Function for Finding Closest Vertex
@@ -32,9 +32,9 @@ def minDistanceCalc(vertices, distance, shortest_path_list):
 def dijkstra(mat, vertices, src):
     # Array - List Definitions
 
-    shortest_path_list = [False] * vertices     # List of Size mat With Default False Values
-    distance = [sys.maxsize] * vertices          # List of Size mat With Default INT_MAX Values
-    distance[src] = 0                           # Set src Distance to Zero
+    shortest_path_list = [False] * vertices  # List of Size mat With Default False Values
+    distance = [sys.maxsize] * vertices  # List of Size mat With Default INT_MAX Values
+    distance[src] = 0  # Set src Distance to Zero
 
     for cnt in range(vertices):
         # Find Closest Vertex Not Processed
@@ -49,7 +49,7 @@ def dijkstra(mat, vertices, src):
             if mat[u, v] > 0 and shortest_path_list[v] == False and distance[v] > (distance[u] + mat[u, v]):
                 distance[v] = distance[u] + mat[u, v]
 
-        return distance
+    return distance
 
 
 # Define Network Topology as Array - Matrix
