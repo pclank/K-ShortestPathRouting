@@ -15,7 +15,7 @@ def testPrint(distance):
 # Define Distance Helper Function for Finding Closest Vertex
 
 def minDistanceCalc(vertices, distance, shortest_path_list):
-    min_distance = sys.maxint
+    min_distance = sys.maxsize
 
     minimum_index = 0
 
@@ -33,7 +33,7 @@ def dijkstra(mat, vertices, src):
     # Array - List Definitions
 
     shortest_path_list = [False] * vertices     # List of Size mat With Default False Values
-    distance = [sys.maxint] * vertices          # List of Size mat With Default INT_MAX Values
+    distance = [sys.maxsize] * vertices          # List of Size mat With Default INT_MAX Values
     distance[src] = 0                           # Set src Distance to Zero
 
     for cnt in range(vertices):
@@ -45,7 +45,7 @@ def dijkstra(mat, vertices, src):
 
         # Update Distances
 
-        for v in range(mat):
+        for v in range(vertices):
             if mat[u, v] > 0 and shortest_path_list[v] == False and distance[v] > (distance[u] + mat[u, v]):
                 distance[v] = distance[u] + mat[u, v]
 
@@ -60,11 +60,14 @@ network = np.array([[0, 0, 5, 0, 0],
                     [0, 7, 0, 1, 0]])
 
 # Number of Vertices
-vertices = math.sqrt(np.size(network))
+vertices = len(network)
 
 # Testing Section
 
-test_distance = dijkstra(network, vertices, 0)
+# User Choice Over Source Vertex
+choice = input('\nGive Source Vertex for Dijkstra: ')
+
+test_distance = dijkstra(network, vertices, choice)
 testPrint(test_distance)
 
 # User Choice Over K Number of Paths
