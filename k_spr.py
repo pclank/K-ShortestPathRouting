@@ -65,12 +65,12 @@ vertices = len(network)
 # Testing Section
 
 # User Choice Over Source Vertex
-choice = input('\nGive Source Vertex for Dijkstra: ')
+choice = int(input('\nGive Source Vertex for Dijkstra: '))
 
 test_distance = dijkstra(network, vertices, choice)
 testPrint(test_distance)
 
 # User Choice Over K Number of Paths
-choice = input('\nGive Number of Shortest Paths to Calculate: ')
+choice = int(input('\nGive Number of Shortest Paths to Calculate: '))
 
 # TODO: Extended Dijkstra Running Here
