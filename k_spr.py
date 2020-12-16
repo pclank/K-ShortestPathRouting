@@ -2,6 +2,7 @@
 
 import numpy as np
 import sys
+import math
 
 
 # Define Tester Function for Printing Results
@@ -59,7 +60,12 @@ network = np.array([[0, 0, 5, 0, 0],
                     [0, 7, 0, 1, 0]])
 
 # Number of Vertices
-vertices = np.size(network) / 2
+vertices = math.sqrt(np.size(network))
+
+# Testing Section
+
+test_distance = dijkstra(network, vertices, 0)
+testPrint(test_distance)
 
 # User Choice Over K Number of Paths
 choice = input('\nGive Number of Shortest Paths to Calculate: ')
