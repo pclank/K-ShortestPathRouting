@@ -7,9 +7,9 @@ import math
 
 # Define Tester Function for Printing Results
 
-def testPrint(distance):
+def testPrint(distance, path_list):
     for v in range(vertices):
-        print("\nDistance from %d is: %d" % (v, distance[v]))
+        print("\nDistance from %d is: %d - Path: " % (v, distance[v]), path_list[v])
 
 
 # Define Distance Helper Function for Finding Closest Vertex
@@ -35,6 +35,7 @@ def dijkstra(mat, vertices, src):
     shortest_path_list = [False] * vertices  # List of Size mat With Default False Values
     distance = [sys.maxsize] * vertices  # List of Size mat With Default INT_MAX Values
     distance[src] = 0  # Set src Distance to Zero
+    path_list = [[] for _ in range(vertices)]  # List of Paths from Source to All Vertices
 
     for cnt in range(vertices):
         # Find Closest Vertex Not Processed
@@ -48,8 +49,9 @@ def dijkstra(mat, vertices, src):
         for v in range(vertices):
             if mat[u, v] > 0 and shortest_path_list[v] == False and distance[v] > (distance[u] + mat[u, v]):
                 distance[v] = distance[u] + mat[u, v]
+                path_list[v].append(u)
 
-    return distance
+    return distance, path_list
 
 
 # Define Network Topology as Array - Matrix
@@ -59,16 +61,27 @@ network = np.array([[0, 0, 5, 0, 0],
                     [0, 3, 1, 0, 1],
                     [0, 7, 0, 1, 0]])
 
+network2 = np.array([[0, 4, 0, 0, 0, 0, 0, 8, 0],
+                     [4, 0, 8, 0, 0, 0, 0, 11, 0],
+                     [0, 8, 0, 7, 0, 4, 0, 0, 2],
+                     [0, 0, 7, 0, 9, 14, 0, 0, 0],
+                     [0, 0, 0, 9, 0, 10, 0, 0, 0],
+                     [0, 0, 4, 14, 10, 0, 2, 0, 0],
+                     [0, 0, 0, 0, 0, 2, 0, 1, 6],
+                     [8, 11, 0, 0, 0, 0, 1, 0, 7],
+                     [0, 0, 2, 0, 0, 0, 6, 7, 0]
+                     ])
+
 # Number of Vertices
-vertices = len(network)
+vertices = len(network2)
 
 # Testing Section
 
 # User Choice Over Source Vertex
 choice = int(input('\nGive Source Vertex for Dijkstra: '))
 
-test_distance = dijkstra(network, vertices, choice)
-testPrint(test_distance)
+test_distance, test_path_list = dijkstra(network2, vertices, choice)
+testPrint(test_distance, test_path_list)
 
 # User Choice Over K Number of Paths
 choice = int(input('\nGive Number of Shortest Paths to Calculate: '))
