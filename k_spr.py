@@ -88,17 +88,46 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
     path_list = []          # List of Shortest Paths
     cnt = [0] * vertices    # Counter of Shortest Paths Found for Every Vertex
     temp_path_list = [[0]]  # List of Temporary Paths
-    cost = [] * vertices    # List of Costs According to Paths in temp_path_list
+    cost = [0]              # List of Costs According to Paths in temp_path_list
 
     while temp_path_list and cnt[tgt] < k:
         # Get Path Based on Index of Path with Least Cost
-        path = temp_path_list[cost.index(min(cost))]
+
+        path_index = cost.index(min(cost))          # TODO: Check Proper Usage of min()
+        path = temp_path_list[path_index]
+
+        # Save cost Before Removing
+        temp_cost = cost[path_index]
 
         # Remove path from temp_path_list
         temp_path_list.remove(path)
 
-        # Increment Counter Variable of path Target
+        # Remove temp_cost from cost
+        cost.pop(path_index)
+
+        # Increment Counter Variable of path Target Vertex
         cnt[path[-1]] += 1
+
+        # If path Target is tgt Add path to path_list
+
+        if path[-1] == tgt:
+            path_list.append(path)
+
+        # Check Adjacent Vertices
+
+        if cnt[path[-1]] <= k:
+            for v in range(vertices):
+                if mat[cnt[path[-1]], v] > 0:
+                    # Add Edge (u, v) to path
+                    new_path = path.append(v)
+
+                    # Add new_path to temp_path_list
+                    temp_path_list.append(new_path)
+
+                    # Set cost to Added cost from New Edge
+                    cost.append(temp_cost + mat[cnt[path[-1]], v])
+
+    return path_list
 
 
 # Define Network Topology as Array - Matrix
