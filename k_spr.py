@@ -71,9 +71,9 @@ def dijkstra(mat, vertices, src):
     # Array - List Definitions
 
     shortest_path_list = [False] * vertices  # List of Size mat With Default False Values
-    distance = [sys.maxsize] * vertices  # List of Size mat With Default INT_MAX Values
-    distance[src] = 0  # Set src Distance to Zero
-    parent = [*range(vertices)]  # List of Paths from Source to All Vertices
+    distance = [sys.maxsize] * vertices      # List of Size mat With Default INT_MAX Values
+    distance[src] = 0                        # Set src Distance to Zero
+    parent = [*range(vertices)]              # List of Paths from Source to All Vertices
 
     for cnt in range(vertices):
         # Find Closest Vertex Not Processed
@@ -99,11 +99,11 @@ def dijkstra(mat, vertices, src):
 def dijkstraExtended(mat, vertices, src, tgt, k):
     # Array - List Initialization
 
-    path_list = []  # List of Shortest Paths
-    final_cost = []  # List of Final Costs of Shortest Paths
-    cnt = [0] * vertices  # Counter of Shortest Paths Found for Every Vertex
-    temp_path_list = []  # List of Temporary Paths
-    cost = [0]  # List of Costs According to Paths in temp_path_list
+    path_list = []          # List of Shortest Paths
+    final_cost = []         # List of Final Costs of Shortest Paths
+    cnt = [0] * vertices    # Counter of Shortest Paths Found for Every Vertex
+    temp_path_list = []     # List of Temporary Paths
+    cost = [0]              # List of Costs According to Paths in temp_path_list
 
     temp_path_list.append([src])
 
