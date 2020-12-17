@@ -198,6 +198,9 @@ if fun_choice == 0:
     # User Choice Over Source Vertex
     src = int(input('\nGive Source Vertex for Dijkstra: '))
 
+    # Print the Network Being Processed
+    print("\nPrinting Network Being Processed:\n", network, "\n\nPrinting Shortest Paths Calculated from %d:" % src)
+
     test_distance, test_path_list = dijkstra(network, vertices, src)
     testPrint(test_distance, test_path_list)
 
@@ -210,6 +213,9 @@ elif fun_choice == 1:
 
     # User Choice Over K Number of Paths
     k = int(input('Give Number of Shortest Paths to Calculate: '))
+
+    # Print the Network Being Processed
+    print("\nPrinting Network Being Processed:\n", network, "\n\nPrinting %d Shortest Paths Calculated Between %d and %d:" % (k, src, tgt))
 
     # Run Extended Dijkstra Algorithm Function
     path_list, path_cost = dijkstraExtended(network, vertices, src, tgt, k)
