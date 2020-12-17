@@ -4,6 +4,10 @@ import numpy as np
 import sys
 
 
+# **********************************************************
+# Function Definition Section
+# **********************************************************
+
 # Define Tester Function for Printing Results from Dijkstra
 
 def testPrint(distance, path_list):
@@ -13,8 +17,12 @@ def testPrint(distance, path_list):
 
 # Define Tester Function for Printing Results from Extended Dijkstra
 
-def testPrintExtended(path_list):   # TODO: Possibly, Improve Function
-    print('\n', path_list)
+def testPrintExtended(path_list, cost_list):
+    cnt = 0
+
+    for path in path_list:
+        print("\nPath %d: " % cnt, path, " with Cost: %d" % cost_list[cnt])
+        cnt += 1
 
 
 # Define Distance Helper Function for Finding Closest Vertex
@@ -63,9 +71,9 @@ def dijkstra(mat, vertices, src):
     # Array - List Definitions
 
     shortest_path_list = [False] * vertices  # List of Size mat With Default False Values
-    distance = [sys.maxsize] * vertices      # List of Size mat With Default INT_MAX Values
-    distance[src] = 0                        # Set src Distance to Zero
-    parent = [*range(vertices)]              # List of Paths from Source to All Vertices
+    distance = [sys.maxsize] * vertices  # List of Size mat With Default INT_MAX Values
+    distance[src] = 0  # Set src Distance to Zero
+    parent = [*range(vertices)]  # List of Paths from Source to All Vertices
 
     for cnt in range(vertices):
         # Find Closest Vertex Not Processed
@@ -91,15 +99,18 @@ def dijkstra(mat, vertices, src):
 def dijkstraExtended(mat, vertices, src, tgt, k):
     # Array - List Initialization
 
-    path_list = []          # List of Shortest Paths
-    cnt = [0] * vertices    # Counter of Shortest Paths Found for Every Vertex
-    temp_path_list = [[0]]  # List of Temporary Paths
-    cost = [0]              # List of Costs According to Paths in temp_path_list
+    path_list = []  # List of Shortest Paths
+    final_cost = []  # List of Final Costs of Shortest Paths
+    cnt = [0] * vertices  # Counter of Shortest Paths Found for Every Vertex
+    temp_path_list = []  # List of Temporary Paths
+    cost = [0]  # List of Costs According to Paths in temp_path_list
+
+    temp_path_list.append([src])
 
     while temp_path_list and cnt[tgt] < k:
         # Get Path Based on Index of Path with Least Cost
 
-        path_index = cost.index(min(cost))          # TODO: Check Proper Usage of min()
+        path_index = cost.index(min(cost))  # TODO: Check Proper Usage of min()
         path = temp_path_list[path_index]
 
         # Save cost Before Removing
@@ -114,26 +125,30 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
         # Increment Counter Variable of path Target Vertex
         cnt[path[-1]] += 1
 
-        # If path Target is tgt Add path to path_list
+        # If path Target is tgt Add path to path_list, and Add cost to final_cost
 
         if path[-1] == tgt:
             path_list.append(path)
+            final_cost.append(temp_cost)
 
         # Check Adjacent Vertices
 
         if cnt[path[-1]] <= k:
             for v in range(vertices):
-                if mat[cnt[path[-1]], v] > 0:
-                    # Add Edge (u, v) to path
-                    new_path = path.append(v)
+                if mat[path[-1], v] > 0 and v not in path:
+                    # Add Edge (u, v) to path as new_path
+
+                    new_path = []
+                    new_path.extend(path)
+                    new_path.append(v)
 
                     # Add new_path to temp_path_list
                     temp_path_list.append(new_path)
 
                     # Set cost to Added cost from New Edge
-                    cost.append(temp_cost + mat[cnt[path[-1]], v])
+                    cost.append(temp_cost + mat[path[-1], v])
 
-    return path_list
+    return path_list, final_cost
 
 
 # *****************************************
@@ -182,10 +197,10 @@ elif fun_choice == 1:
     tgt = int(input('Give Target Vertex for Extended Dijkstra: '))
 
     # User Choice Over K Number of Paths
-    k = int(input('\nGive Number of Shortest Paths to Calculate: '))
+    k = int(input('Give Number of Shortest Paths to Calculate: '))
 
     # Run Extended Dijkstra Algorithm Function
-    path_list = dijkstraExtended(network, vertices, src, tgt, k)
+    path_list, path_cost = dijkstraExtended(network, vertices, src, tgt, k)
 
     # Print Results
-    testPrintExtended(path_list)
+    testPrintExtended(path_list, path_cost)
