@@ -157,30 +157,42 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
 
 # Define Network Topology as Array - Matrix
 
-network = np.array([[0, 0, 5, 0, 0],
-                    [0, 0, 0, 3, 7],
-                    [5, 0, 0, 1, 0],
-                    [0, 3, 1, 0, 1],
-                    [0, 7, 0, 1, 0]])
+net00 = np.array([[0, 0, 5, 0, 0],
+                  [0, 0, 0, 3, 7],
+                  [5, 0, 0, 1, 0],
+                  [0, 3, 1, 0, 1],
+                  [0, 7, 0, 1, 0]])
 
-network2 = np.array([[0, 4, 0, 0, 0, 0, 0, 8, 0],
-                     [4, 0, 8, 0, 0, 0, 0, 11, 0],
-                     [0, 8, 0, 7, 0, 4, 0, 0, 2],
-                     [0, 0, 7, 0, 9, 14, 0, 0, 0],
-                     [0, 0, 0, 9, 0, 10, 0, 0, 0],
-                     [0, 0, 4, 14, 10, 0, 2, 0, 0],
-                     [0, 0, 0, 0, 0, 2, 0, 1, 6],
-                     [8, 11, 0, 0, 0, 0, 1, 0, 7],
-                     [0, 0, 2, 0, 0, 0, 6, 7, 0]
-                     ])
+net01 = np.array([[0, 4, 0, 0, 0, 0, 0, 8, 0],
+                  [4, 0, 8, 0, 0, 0, 0, 11, 0],
+                  [0, 8, 0, 7, 0, 4, 0, 0, 2],
+                  [0, 0, 7, 0, 9, 14, 0, 0, 0],
+                  [0, 0, 0, 9, 0, 10, 0, 0, 0],
+                  [0, 0, 4, 14, 10, 0, 2, 0, 0],
+                  [0, 0, 0, 0, 0, 2, 0, 1, 6],
+                  [8, 11, 0, 0, 0, 0, 1, 0, 7],
+                  [0, 0, 2, 0, 0, 0, 6, 7, 0]
+                  ])
 
-# Number of Vertices
-vertices = len(network)
+# Default Value
+network = net00
 
 # Testing Section
 
 # User Choice over Which Function to Run
 fun_choice = int(input('\n0: Dijkstra\n1: Extended Dijkstra\nSelect Function to Run: '))
+
+# User Choice over Network to Use
+net = int(input('\n0: Small Network\n1: Large Network\nSelect Network to Process: '))
+
+if net == 0:
+    network = net00
+
+elif net == 1:
+    network = net01
+
+# Number of Vertices
+vertices = len(network)
 
 if fun_choice == 0:
     # User Choice Over Source Vertex
