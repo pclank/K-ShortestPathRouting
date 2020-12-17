@@ -4,11 +4,17 @@ import numpy as np
 import sys
 
 
-# Define Tester Function for Printing Results
+# Define Tester Function for Printing Results from Dijkstra
 
 def testPrint(distance, path_list):
     for v in range(vertices):
         print("\nDistance from %d is: %d - Path: " % (v, distance[v]), path_list[v])
+
+
+# Define Tester Function for Printing Results from Extended Dijkstra
+
+def testPrintExtended(path_list):   # TODO: Possibly, Improve Function
+    print('\n', path_list)
 
 
 # Define Distance Helper Function for Finding Closest Vertex
@@ -130,7 +136,12 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
     return path_list
 
 
+# *****************************************
+# Driver Code
+# *****************************************
+
 # Define Network Topology as Array - Matrix
+
 network = np.array([[0, 0, 5, 0, 0],
                     [0, 0, 0, 3, 7],
                     [5, 0, 0, 1, 0],
@@ -153,13 +164,28 @@ vertices = len(network)
 
 # Testing Section
 
-# User Choice Over Source Vertex
-choice = int(input('\nGive Source Vertex for Dijkstra: '))
+# User Choice over Which Function to Run
+fun_choice = int(input('\n0: Dijkstra\n1: Extended Dijkstra\nSelect Function to Run: '))
 
-test_distance, test_path_list = dijkstra(network, vertices, choice)
-testPrint(test_distance, test_path_list)
+if fun_choice == 0:
+    # User Choice Over Source Vertex
+    src = int(input('\nGive Source Vertex for Dijkstra: '))
 
-# User Choice Over K Number of Paths
-choice = int(input('\nGive Number of Shortest Paths to Calculate: '))
+    test_distance, test_path_list = dijkstra(network, vertices, src)
+    testPrint(test_distance, test_path_list)
 
-# TODO: Extended Dijkstra Running Here
+elif fun_choice == 1:
+    # User Choice Over Source Vertex
+    src = int(input('\nGive Source Vertex for Extended Dijkstra: '))
+
+    # User Choice Over Target Vertex
+    tgt = int(input('Give Target Vertex for Extended Dijkstra: '))
+
+    # User Choice Over K Number of Paths
+    k = int(input('\nGive Number of Shortest Paths to Calculate: '))
+
+    # Run Extended Dijkstra Algorithm Function
+    path_list = dijkstraExtended(network, vertices, src, tgt, k)
+
+    # Print Results
+    testPrintExtended(path_list)
