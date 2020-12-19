@@ -151,6 +151,47 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
     return path_list, final_cost
 
 
+# Define Edge - Usage Reduction Function    # TODO: Change Function so that it Works Separately for Every Pair of Vertices
+
+def edgeReduction(path_list):       # TODO: Make Sure there's Always a Path, for Every Pair of Vertices, Remaining
+    # Array - List Initialization
+
+    edge_list = []          # List of Unique Edges
+    cnt_list = []           # List of Counts of Edges in edge_list
+    updated_path_list = []  # List of Updated Paths
+
+    # Process All Paths in path_list
+
+    for path in path_list:
+        # Process All Edges in path
+
+        cnt = 0
+        while cnt < (len(path) - 1):
+            temp_edge = [path[cnt], path[cnt + 1]]
+            temp_edge_rev = [path[cnt + 1], path[cnt]]
+
+            # Check if Edge Already in edge_list and in Which Form
+
+            form_00 = temp_edge in edge_list            # temp_edge Form in edge_list
+            form_01 = temp_edge_rev in edge_list        # temp_edge_rev Form in edge_list
+
+            # Act According to Above Booleans
+
+            if form_00:
+                cnt_list[edge_list.index(temp_edge)] += 1
+
+            elif form_01:
+                cnt_list[edge_list.index(temp_edge_rev)] += 1
+
+            else:
+                edge_list.append(temp_edge)
+                cnt_list.append(1)
+
+            cnt += 1
+
+        # Process Edges Found and Keep only the "Appropriate" Ones
+
+
 # *****************************************
 # Driver Code
 # *****************************************
