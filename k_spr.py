@@ -151,14 +151,15 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
     return path_list, final_cost
 
 
-# Define Edge - Usage Reduction Function    # TODO: Change Function so that it Works Separately for Every Pair of Vertices
+# Define Edge - Usage Reduction Function for K = 3, path_list of Specific Pair of Vertices
 
-def edgeReduction(path_list):       # TODO: Make Sure there's Always a Path, for Every Pair of Vertices, Remaining
+def edgeReduction(path_list):
     # Array - List Initialization
 
     edge_list = []          # List of Unique Edges
     cnt_list = []           # List of Counts of Edges in edge_list
     updated_path_list = []  # List of Updated Paths
+    reduced_edge_list = []  # List of Edges after Reduction
 
     # Process All Paths in path_list
 
@@ -189,8 +190,34 @@ def edgeReduction(path_list):       # TODO: Make Sure there's Always a Path, for
 
             cnt += 1
 
-        # Process Edges Found and Keep only the "Appropriate" Ones
+    # Process Edges Found and Keep only the "Appropriate" Ones
 
+    cnt = 0
+    for edge in edge_list:
+        if cnt_list[cnt] == len(path_list):         # Edge is Contained in Every Path
+            reduced_edge_list.append(edge)
+
+        elif cnt_list[cnt] == 1:
+            reduced_edge_list.append(edge)          # Edge is Only Contained in One Path
+
+        cnt += 1
+
+    # Check Which Path Contains the "Appropriate" Edges
+
+    for path in path_list:                      # For Every Path
+        flag = 1
+
+        for edge in reduced_edge_list:              # Check that Every Edge is Contained
+            if edge not in path:
+                flag = 0
+                break
+
+        if flag:                                # If it Contained Every Edge, Append path to List
+            updated_path_list.append(path)
+
+    return updated_path_list
+
+# TODO: Add Similar - Logic Implementation Working with All Vertices and Paths
 
 # *****************************************
 # Driver Code
@@ -263,3 +290,9 @@ elif fun_choice == 1:
 
     # Print Results
     testPrintExtended(path_list, path_cost)
+
+    # Run Edge Usage Reduction Function
+    path_list = edgeReduction(path_list)
+
+    # Print Updated Paths           # TODO: Expand in Separate Print Function
+    print(path_list)
