@@ -299,4 +299,4 @@ elif fun_choice == 1:
     path_list = edgeReduction(path_list)
 
     # Print Updated Paths           # TODO: Expand in Separate Print Function
-    print(path_list)
+    print('\nReduced Path List:\n', path_list)
