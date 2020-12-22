@@ -156,10 +156,10 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
 def edgeReduction(path_list):
     # Array - List Initialization
 
-    edge_list = []          # List of Unique Edges
-    cnt_list = []           # List of Counts of Edges in edge_list
-    updated_path_list = []  # List of Updated Paths
-    reduced_edge_list = []  # List of Edges after Reduction
+    edge_list = []                          # List of Unique Edges
+    cnt_list = []                           # List of Counts of Edges in edge_list
+    updated_path_list = []                  # List of Updated Paths
+    usage_cost_list = [0] * len(path_list)  # List of Edges after Reduction
 
     # Process All Paths in path_list
 
@@ -190,32 +190,22 @@ def edgeReduction(path_list):
 
             cnt += 1
 
-    # Process Edges Found and Keep only the "Appropriate" Ones
+    # Calculate Usage-Cost of Every Path
 
     cnt = 0
-    for edge in edge_list:
-        if cnt_list[cnt] == len(path_list):         # Edge is Contained in Every Path
-            reduced_edge_list.append(edge)
-
-        elif cnt_list[cnt] == 1:
-            reduced_edge_list.append(edge)          # Edge is Only Contained in One Path
+    for path in path_list:
+        for edge in edge_list:
+            if edge in path:
+                usage_cost_list[cnt] += 1
 
         cnt += 1
 
-    # Check Which Path Contains the "Appropriate" Edges
+    # Keep Path(s) with Lowest Cost(s)          # TODO: Consider How Many Paths to Keep
 
-    for path in path_list:                      # For Every Path
-        flag = 1
-
-        for edge in reduced_edge_list:              # Check that Every Edge is Contained
-            if edge not in path:
-                flag = 0
-                break
-
-        if flag:                                # If it Contained Every Edge, Append path to List
-            updated_path_list.append(path)
+    updated_path_list.append(path_list[usage_cost_list.index(min(usage_cost_list))])        # TODO: Consider Adding Possible Equal-Valued Paths
 
     if not updated_path_list:
+        print("\nCouldn't Reduce Edge Usage. Shortest Path Will Be Used!\n")
         updated_path_list.append(path_list[0])  # If Paths Cannot be Reduced Using Above Procedure, Use Shortest Path
 
     return updated_path_list
