@@ -215,7 +215,11 @@ def edgeReduction(path_list):
         if flag:                                # If it Contained Every Edge, Append path to List
             updated_path_list.append(path)
 
+    if not updated_path_list:
+        updated_path_list.append(path_list[0])  # If Paths Cannot be Reduced Using Above Procedure, Use Shortest Path
+
     return updated_path_list
+
 
 # TODO: Add Similar - Logic Implementation Working with All Vertices and Paths
 
