@@ -194,9 +194,19 @@ def edgeReduction(path_list):
 
     cnt = 0
     for path in path_list:
+        edge_index = 0
         for edge in edge_list:
-            if edge in path:
-                usage_cost_list[cnt] += 1
+            s_index = 0
+            t_index = 1
+
+            while t_index <= (len(path) - 1):
+                if (path[s_index] == edge[0]) and (path[t_index] == edge[1]):
+                    usage_cost_list[cnt] += cnt_list[edge_index]
+
+                s_index += 1
+                t_index += 1
+
+            edge_index += 1
 
         cnt += 1
 
