@@ -210,9 +210,19 @@ def edgeReduction(path_list):
 
         cnt += 1
 
-    # Keep Path(s) with Lowest Cost(s)          # TODO: Consider How Many Paths to Keep
+    # Some Message Printing
+    print("\nFrom Path List: ", path_list)
 
-    updated_path_list.append(path_list[usage_cost_list.index(min(usage_cost_list))])        # TODO: Consider Adding Possible Equal-Valued Paths
+    # Keep Path(s) with Lowest Cost(s)
+
+    if len(path_list) > 2:
+        index = usage_cost_list.index(min(usage_cost_list))
+        usage_cost_list.pop(index)
+        updated_path_list.append(path_list.pop(index))
+        updated_path_list.append(path_list[usage_cost_list.index(min(usage_cost_list))])
+
+    else:
+        updated_path_list.append(path_list[usage_cost_list.index(min(usage_cost_list))])
 
     if not updated_path_list:
         print("\nCouldn't Reduce Edge Usage. Shortest Path Will Be Used!\n")
@@ -221,7 +231,6 @@ def edgeReduction(path_list):
     return updated_path_list
 
 
-# TODO: Add Similar - Logic Implementation Working with All Vertices and Paths
 # Define Helper Function to Calculate All Paths From All to All Vertices
 
 def fullPathfinder(mat, vertices, k):
@@ -238,7 +247,15 @@ def fullPathfinder(mat, vertices, k):
 
                 testPrintExtended(paths, costs)
 
-    return path_list
+    return path_list, cost_list
+
+
+# Define Helper Function to Apply Reduction for All Vertex Pairs
+
+def fullReduction(paths_list):
+    for paths in paths_list:
+        reduced_list = edgeReduction(paths)
+        print('\nReduced Path List:\n', reduced_list)
 
 
 # *****************************************
@@ -295,12 +312,6 @@ if fun_choice == 0:
     testPrint(test_distance, test_path_list)
 
 elif fun_choice == 1:
-    # User Choice Over Source Vertex
-    # src = int(input('\nGive Source Vertex for Extended Dijkstra: '))
-
-    # User Choice Over Target Vertex
-    # tgt = int(input('Give Target Vertex for Extended Dijkstra: '))
-
     # User Choice Over K Number of Paths
     k = int(input('Give Number of Shortest Paths to Calculate: '))
 
@@ -308,16 +319,10 @@ elif fun_choice == 1:
     print("\nPrinting Network Being Processed:\n", network, "\n\nPrinting %d Shortest Paths Calculated:" % k)
 
     # Run Extended Dijkstra Algorithm Function
-    # path_list, path_cost = dijkstraExtended(network, vertices, src, tgt, k)
-
-    # Run Extended Dijkstra Algorithm Function
-    fullPathfinder(network, vertices, k)
-
-    # Print Results
-    # testPrintExtended(path_list, path_cost)
+    paths_list, costs_list = fullPathfinder(network, vertices, k)
 
     # Run Edge Usage Reduction Function
-    # path_list = edgeReduction(path_list)
+    fullReduction(paths_list)
 
     # Print Updated Paths           # TODO: Expand in Separate Print Function
-    print('\nReduced Path List:\n', path_list)
+    # print('\nReduced Path List:\n', path_list)
