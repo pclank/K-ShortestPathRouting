@@ -222,6 +222,24 @@ def edgeReduction(path_list):
 
 
 # TODO: Add Similar - Logic Implementation Working with All Vertices and Paths
+# Define Helper Function to Calculate All Paths From All to All Vertices
+
+def fullPathfinder(mat, vertices, k):
+    path_list = []
+    cost_list = []
+
+    for source in range(vertices):
+        for target in range(vertices):
+            if source != target:
+                paths, costs = dijkstraExtended(mat, vertices, source, target, k)
+
+                path_list.append(paths)
+                cost_list.append(costs)
+
+                testPrintExtended(paths, costs)
+
+    return path_list
+
 
 # *****************************************
 # Driver Code
@@ -278,25 +296,28 @@ if fun_choice == 0:
 
 elif fun_choice == 1:
     # User Choice Over Source Vertex
-    src = int(input('\nGive Source Vertex for Extended Dijkstra: '))
+    # src = int(input('\nGive Source Vertex for Extended Dijkstra: '))
 
     # User Choice Over Target Vertex
-    tgt = int(input('Give Target Vertex for Extended Dijkstra: '))
+    # tgt = int(input('Give Target Vertex for Extended Dijkstra: '))
 
     # User Choice Over K Number of Paths
     k = int(input('Give Number of Shortest Paths to Calculate: '))
 
     # Print the Network Being Processed
-    print("\nPrinting Network Being Processed:\n", network, "\n\nPrinting %d Shortest Paths Calculated Between %d and %d:" % (k, src, tgt))
+    print("\nPrinting Network Being Processed:\n", network, "\n\nPrinting %d Shortest Paths Calculated:" % k)
 
     # Run Extended Dijkstra Algorithm Function
-    path_list, path_cost = dijkstraExtended(network, vertices, src, tgt, k)
+    # path_list, path_cost = dijkstraExtended(network, vertices, src, tgt, k)
+
+    # Run Extended Dijkstra Algorithm Function
+    fullPathfinder(network, vertices, k)
 
     # Print Results
-    testPrintExtended(path_list, path_cost)
+    # testPrintExtended(path_list, path_cost)
 
     # Run Edge Usage Reduction Function
-    path_list = edgeReduction(path_list)
+    # path_list = edgeReduction(path_list)
 
     # Print Updated Paths           # TODO: Expand in Separate Print Function
     print('\nReduced Path List:\n', path_list)
