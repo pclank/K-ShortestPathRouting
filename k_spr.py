@@ -3,6 +3,11 @@
 import numpy as np
 import sys
 
+# Global Variables
+
+global_edge_list = []
+global_edge_usage_list = []
+
 
 # **********************************************************
 # Function Definition Section
@@ -110,7 +115,7 @@ def dijkstraExtended(mat, vertices, src, tgt, k):
     while temp_path_list and cnt[tgt] < k:
         # Get Path Based on Index of Path with Least Cost
 
-        path_index = cost.index(min(cost))  # TODO: Check Proper Usage of min()
+        path_index = cost.index(min(cost))
         path = temp_path_list[path_index]
 
         # Save cost Before Removing
@@ -188,6 +193,18 @@ def edgeReduction(path_list):
                 edge_list.append(temp_edge)
                 cnt_list.append(1)
 
+            # Add to Global Variables       # TODO: Better Solution Possible
+
+            if temp_edge in global_edge_list:
+                global_edge_usage_list[global_edge_list.index(temp_edge)] += 1
+
+            elif temp_edge_rev in global_edge_list:
+                global_edge_usage_list[global_edge_list.index(temp_edge_rev)] += 1
+
+            else:
+                global_edge_list.append(temp_edge)
+                global_edge_usage_list.append(1)
+
             cnt += 1
 
     # Calculate Usage-Cost of Every Path
@@ -258,6 +275,14 @@ def fullReduction(paths_list):
         print('\nReduced Path List:\n', reduced_list)
 
 
+# Define Function to Print Edge Usage
+def printUsage():
+    cnt = 0
+
+    for edge in global_edge_list:
+        print("\nEdge ", edge, "is Used %d Times" % global_edge_usage_list[cnt])
+
+
 # *****************************************
 # Driver Code
 # *****************************************
@@ -324,5 +349,5 @@ elif fun_choice == 1:
     # Run Edge Usage Reduction Function
     fullReduction(paths_list)
 
-    # Print Updated Paths           # TODO: Expand in Separate Print Function
-    # print('\nReduced Path List:\n', path_list)
+    # Print Usage for Each Edge
+    printUsage()
