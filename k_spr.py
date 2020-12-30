@@ -2,6 +2,7 @@
 
 import numpy as np
 import sys
+from statistics import mean
 
 # Global Variables
 
@@ -282,6 +283,8 @@ def printUsage():
     for edge in global_edge_list:
         print("\nEdge ", edge, "is Used %d Times" % global_edge_usage_list[cnt])
 
+        cnt += 1
+
 
 # *****************************************
 # Driver Code
@@ -351,3 +354,6 @@ elif fun_choice == 1:
 
     # Print Usage for Each Edge
     printUsage()
+
+    # Print Average Edge Usage
+    print("\nAverage Edge Usage is: ", round(mean(global_edge_usage_list), 2))
