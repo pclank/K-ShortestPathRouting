@@ -2,6 +2,7 @@
 
 import numpy as np
 import sys
+import random
 from statistics import mean
 
 # Global Variables
@@ -271,12 +272,19 @@ def fullPathfinder(mat, vertices, k):
 # Define Helper Function to Apply Reduction for All Vertex Pairs
 
 def fullReduction(paths_list):
+    new_paths = []
+
     for paths in paths_list:
         reduced_list = edgeReduction(paths)
+        new_paths.append(reduced_list)
+
         print('\nReduced Path List:\n', reduced_list)
+
+    return new_paths
 
 
 # Define Function to Print Edge Usage
+
 def printUsage():
     cnt = 0
 
@@ -285,6 +293,64 @@ def printUsage():
 
         cnt += 1
 
+
+# Define Function to Randomly Assign Lightpaths
+
+def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just One Path Per Set of Paths
+    available_lightpaths = [list(range(1, lightpaths))] * vertices      # List of Lists Containing Lightpath Indices Available per Vertex
+    blocked = 0                                                         # Number of Blocked Requests
+    requests = 0                                                        # Number of Total Requests Made
+    edge_matrix = np.zeros(vertices, vertices)                          # NxN Matrix Containing Lightpath Index Used for Each Edge
+
+    for path_list in new_paths:                             # For All Path Lists
+        for path in path_list:                                  # For All Paths in List
+            break_flag = 0
+
+            # Process All Edges in path
+
+            cnt = 0
+            while cnt < (len(path) - 1):
+                source = path[cnt]
+                target = path[cnt + 1]
+
+                # Check if a Connection has not Already Being Established
+
+                if edge_matrix[source][target] == 0:
+                    requests += 1                                                           # Increment requests
+                    limit = len(available_lightpaths[source])
+
+                    if limit == 0:                      # If No Available Lightpaths
+                        blocked += 1
+                        break_flag = 1
+
+                        break
+
+                    else:
+                        selection = available_lightpaths[random.randint(0, limit - 1)]  # Select Random Available Lightpath from Source Vertex
+
+                        # Check if Selected Lightpath is Also Available at the Target
+
+                        if selection not in available_lightpaths[target]:
+                            blocked += 1
+                            break_flag = 1
+
+                            break
+
+                        else:
+                            available_lightpaths[source].pop(available_lightpaths[source].index(selection))
+                            available_lightpaths[target].pop(available_lightpaths[target].index(selection))
+
+                            edge_matrix[source][target] = selection
+                            edge_matrix[target][source] = selection
+
+            if break_flag == 1:
+                break
+
+    # Print Results
+
+    for i in range(0, vertices):
+        for j in range(0, vertices):
+            print("Edge %d - %d uses Lightpath: λ%d\n" % (i, j, edge_matrix[i][j]))
 
 # *****************************************
 # Driver Code
@@ -350,7 +416,7 @@ elif fun_choice == 1:
     paths_list, costs_list = fullPathfinder(network, vertices, k)
 
     # Run Edge Usage Reduction Function
-    fullReduction(paths_list)
+    new_paths = fullReduction(paths_list)
 
     # Print Usage for Each Edge
     printUsage()
