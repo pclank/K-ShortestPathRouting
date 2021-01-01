@@ -296,11 +296,11 @@ def printUsage():
 
 # Define Function to Randomly Assign Lightpaths
 
-def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just One Path Per Set of Paths
-    available_lightpaths = [list(range(1, lightpaths))] * vertices      # List of Lists Containing Lightpath Indices Available per Vertex
-    blocked = 0                                                         # Number of Blocked Requests
-    requests = 0                                                        # Number of Total Requests Made
-    edge_matrix = np.zeros(vertices, vertices)                          # NxN Matrix Containing Lightpath Index Used for Each Edge
+def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just One Path Per Set of Paths TODO: Add Functionality to Continue Searching for Candidates if Target Doesn't Have Selection Available
+    available_lightpaths = [list(range(1, lightpaths)) for _ in range(vertices)]  # List of Lists Containing Lightpath Indices Available per Vertex
+    blocked = 0                                                                   # Number of Blocked Requests
+    requests = 0                                                                  # Number of Total Requests Made
+    edge_matrix = np.zeros((vertices, vertices))                                  # NxN Matrix Containing Lightpath Index Used for Each Edge
 
     for path_list in new_paths:                             # For All Path Lists
         for path in path_list:                                  # For All Paths in List
@@ -326,7 +326,7 @@ def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just
                         break
 
                     else:
-                        selection = available_lightpaths[random.randint(0, limit - 1)]  # Select Random Available Lightpath from Source Vertex
+                        selection = available_lightpaths[source][random.randint(0, limit - 1)]  # Select Random Available Lightpath from Source Vertex
 
                         # Check if Selected Lightpath is Also Available at the Target
 
@@ -340,8 +340,10 @@ def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just
                             available_lightpaths[source].pop(available_lightpaths[source].index(selection))
                             available_lightpaths[target].pop(available_lightpaths[target].index(selection))
 
-                            edge_matrix[source][target] = selection
-                            edge_matrix[target][source] = selection
+                            edge_matrix[source, target] = selection
+                            edge_matrix[target, source] = selection
+
+                cnt += 1
 
             if break_flag == 1:
                 break
@@ -350,7 +352,8 @@ def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just
 
     for i in range(0, vertices):
         for j in range(0, vertices):
-            print("Edge %d - %d uses Lightpath: λ%d\n" % (i, j, edge_matrix[i][j]))
+            print("Edge %d - %d uses Lightpath: λ%d\n" % (i, j, edge_matrix[i, j]))
+
 
 # *****************************************
 # Driver Code
@@ -423,3 +426,6 @@ elif fun_choice == 1:
 
     # Print Average Edge Usage
     print("\nAverage Edge Usage is: ", round(mean(global_edge_usage_list), 2))
+
+    # Run Random Lightpath Assignment
+    randomAssignment(new_paths, 5)
