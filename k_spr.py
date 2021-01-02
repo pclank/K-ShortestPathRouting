@@ -77,10 +77,10 @@ def buildPath(src, parent, vertices):
 def dijkstra(mat, vertices, src):
     # Array - List Definitions
 
-    shortest_path_list = [False] * vertices  # List of Size mat With Default False Values
-    distance = [sys.maxsize] * vertices      # List of Size mat With Default INT_MAX Values
-    distance[src] = 0                        # Set src Distance to Zero
-    parent = [*range(vertices)]              # List of Paths from Source to All Vertices
+    shortest_path_list = [False] * vertices     # List of Size mat With Default False Values
+    distance = [sys.maxsize] * vertices         # List of Size mat With Default INT_MAX Values
+    distance[src] = 0                           # Set src Distance to Zero
+    parent = [*range(vertices)]                 # List of Paths from Source to All Vertices
 
     for cnt in range(vertices):
         # Find Closest Vertex Not Processed
@@ -180,8 +180,8 @@ def edgeReduction(path_list):
 
             # Check if Edge Already in edge_list and in Which Form
 
-            form_00 = temp_edge in edge_list            # temp_edge Form in edge_list
-            form_01 = temp_edge_rev in edge_list        # temp_edge_rev Form in edge_list
+            form_00 = temp_edge in edge_list  # temp_edge Form in edge_list
+            form_01 = temp_edge_rev in edge_list  # temp_edge_rev Form in edge_list
 
             # Act According to Above Booleans
 
@@ -296,14 +296,14 @@ def printUsage():
 
 # Define Function to Randomly Assign Lightpaths
 
-def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just One Path Per Set of Paths
-    available_lightpaths = [list(range(1, lightpaths + 1)) for _ in range(vertices)]  # List of Lists Containing Lightpath Indices Available per Vertex
-    blocked = 0                                                                       # Number of Blocked Requests
-    requests = 0                                                                      # Number of Total Requests Made
-    edge_matrix = np.zeros((vertices, vertices))                                      # NxN Matrix Containing Lightpath Index Used for Each Edge
+def randomAssignment(new_paths, lightpaths):  # TODO: Consider Processing Just One Path Per Set of Paths
+    available_lightpaths = [list(range(1, lightpaths + 1)) for _ in range(vertices)]    # List of Lists Containing Lightpath Indices Available per Vertex
+    blocked = 0                                                                         # Number of Blocked Requests
+    requests = 0                                                                        # Number of Total Requests Made
+    edge_matrix = np.zeros((vertices, vertices))                                        # NxN Matrix Containing Lightpath Index Used for Each Edge
 
-    for path_list in new_paths:                             # For All Path Lists
-        for path in path_list:                                  # For All Paths in List
+    for path_list in new_paths:  # For All Path Lists
+        for path in path_list:  # For All Paths in List
             break_flag = 0
 
             # Process All Edges in path
@@ -313,15 +313,15 @@ def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just
                 source = path[cnt]
                 target = path[cnt + 1]
 
-                attempts = []                       # List Containing Already Attempted Lightpaths
+                attempts = []  # List Containing Already Attempted Lightpaths
 
                 # Check if a Connection has not Already Being Established
 
                 if edge_matrix[source][target] == 0:
-                    requests += 1                               # Increment requests
+                    requests += 1  # Increment requests
                     limit = len(available_lightpaths[source])
 
-                    if limit == 0:                      # If No Available Lightpaths
+                    if limit == 0:  # If No Available Lightpaths
                         blocked += 1
                         break_flag = 1
 
@@ -330,7 +330,8 @@ def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just
                     else:
                         inner_break_flag = 0
                         while len(attempts) < limit:
-                            selection = available_lightpaths[source][random.randint(0, limit - 1)]  # Select Random Available Lightpath from Source Vertex
+                            selection = available_lightpaths[source][
+                                random.randint(0, limit - 1)]  # Select Random Available Lightpath from Source Vertex
 
                             # Check if Selected Lightpath is Also Available at the Target
 
@@ -372,10 +373,10 @@ def randomAssignment(new_paths, lightpaths):    # TODO: Consider Processing Just
 # Define Function to Assign Lightpaths Using First - Fit Algorithm
 
 def firstFitAssign(new_paths, lightpaths):
-    available_lightpaths = [list(range(1, lightpaths + 1)) for _ in range(vertices)]  # List of Lists Containing Lightpath Indices Available per Vertex
-    blocked = 0  # Number of Blocked Requests
-    requests = 0  # Number of Total Requests Made
-    edge_matrix = np.zeros((vertices, vertices))  # NxN Matrix Containing Lightpath Index Used for Each Edge
+    available_lightpaths = [list(range(1, lightpaths + 1)) for _ in range(vertices)]    # List of Lists Containing Lightpath Indices Available per Vertex
+    blocked = 0                                                                         # Number of Blocked Requests
+    requests = 0                                                                        # Number of Total Requests Made
+    edge_matrix = np.zeros((vertices, vertices))                                        # NxN Matrix Containing Lightpath Index Used for Each Edge
 
     for path_list in new_paths:  # For All Path Lists
         for path in path_list:  # For All Paths in List
@@ -406,7 +407,8 @@ def firstFitAssign(new_paths, lightpaths):
                         inner_break_flag = 0
                         attempt_index = 0
                         while len(attempts) < limit:
-                            selection = available_lightpaths[source][attempt_index]  # Select First Available Lightpath from Source Vertex
+                            selection = available_lightpaths[source][
+                                attempt_index]  # Select First Available Lightpath from Source Vertex
 
                             # Check if Selected Lightpath is Also Available at the Target
 
@@ -426,6 +428,94 @@ def firstFitAssign(new_paths, lightpaths):
                                     break
 
                             attempt_index += 1
+
+                        if inner_break_flag == 1:
+                            blocked += 1
+                            break_flag = 1
+
+                            break
+
+                cnt += 1
+
+            if break_flag == 1:
+                break
+
+    # Print Results
+
+    for i in range(0, vertices):
+        for j in range(0, vertices):
+            print("Edge %d - %d uses Lightpath: λ%d\n" % (i, j, edge_matrix[i, j]))
+
+    print("\nWith %d Requests, and " % requests, (blocked * 100) / requests, "% Blocked.")
+
+
+# Define Function to Assign Lightpaths Using Least - Used Algorithm
+
+def leastUsedAssign(new_paths, lightpaths):
+    available_lightpaths = [list(range(1, lightpaths + 1)) for _ in range(vertices)]    # List of Lists Containing Lightpath Indices Available per Vertex
+    blocked = 0                                                                         # Number of Blocked Requests
+    requests = 0                                                                        # Number of Total Requests Made
+    edge_matrix = np.zeros((vertices, vertices))                                        # NxN Matrix Containing Lightpath Index Used for Each Edge
+    lightpath_usage = [0] * lightpaths                                                  # List Containing the Number of Uses of Each Lightpath
+
+    for path_list in new_paths:  # For All Path Lists
+        for path in path_list:  # For All Paths in List
+            break_flag = 0
+
+            # Process All Edges in path
+
+            cnt = 0
+            while cnt < (len(path) - 1):
+                source = path[cnt]
+                target = path[cnt + 1]
+
+                attempts = []  # List Containing Already Attempted Lightpaths
+
+                # Check if a Connection has not Already Being Established
+
+                if edge_matrix[source][target] == 0:
+                    requests += 1  # Increment requests
+                    limit = len(available_lightpaths[source])
+
+                    if limit == 0:  # If No Available Lightpaths
+                        blocked += 1
+                        break_flag = 1
+
+                        break
+
+                    else:   # TODO: Change Logic so that Only Elements Present to available_lightpaths[source] are Considered When Searching for Minimum
+                        inner_break_flag = 0
+                        while len(attempts) < limit:
+                            selection = 0
+                            temp_light_list = []
+
+                            for lightpath in available_lightpaths[source]:
+                                if lightpath not in attempts:
+                                    temp_light_list.append(lightpath_usage[lightpath - 1])
+                                    attempts.append(lightpath_usage[lightpath - 1])
+
+                            if not temp_light_list:
+                                inner_break_flag = 1
+                                break
+
+                            selection = available_lightpaths[source][temp_light_list.index(min(temp_light_list))]
+
+                            # Check if Selected Lightpath is Also Available at the Target
+
+                            if selection != 0:
+                                if (selection not in available_lightpaths[target]) and (len(attempts) == limit):
+                                    inner_break_flag = 1
+
+                                elif selection in available_lightpaths[target]:
+                                    available_lightpaths[source].pop(available_lightpaths[source].index(selection))
+                                    available_lightpaths[target].pop(available_lightpaths[target].index(selection))
+
+                                    edge_matrix[source, target] = selection
+                                    edge_matrix[target, source] = selection
+
+                                    lightpath_usage[selection - 1] += 1  # TODO: Debug to Ensure Correct Type
+
+                                    break
 
                         if inner_break_flag == 1:
                             blocked += 1
@@ -520,16 +610,19 @@ elif fun_choice == 1:
     print("\nAverage Edge Usage is: ", round(mean(global_edge_usage_list), 2))
 
     # User Choice Over Number of Lightpaths
-    l = int(input('Give Number of Lightpaths Available in Each Vertex: '))
+    number_of_lightpaths = int(input('Give Number of Lightpaths Available in Each Vertex: '))
 
     # User Choice Over Assignment Algorithm to Use
-    assign_choice = int(input('\n0: Random\n1: First - Fit\n2: Least Used\nSelect Assignment Function to Run: '))
+    assign_choice = int(input('\n0: Random\n1: First - Fit\n2: Least - Used\nSelect Assignment Function to Run: '))
 
     if assign_choice == 0:
         # Run Random Lightpath Assignment
-        randomAssignment(new_paths, l)
+        randomAssignment(new_paths, number_of_lightpaths)
 
     elif assign_choice == 1:
         # Run First - Fit Lightpath Assignment
-        firstFitAssign(new_paths, l)
+        firstFitAssign(new_paths, number_of_lightpaths)
 
+    elif assign_choice == 2:
+        # Run Least - Used Lightpath Assignment
+        leastUsedAssign(new_paths, number_of_lightpaths)
