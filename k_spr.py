@@ -519,14 +519,17 @@ elif fun_choice == 1:
     # Print Average Edge Usage
     print("\nAverage Edge Usage is: ", round(mean(global_edge_usage_list), 2))
 
+    # User Choice Over Number of Lightpaths
+    l = int(input('Give Number of Lightpaths Available in Each Vertex: '))
+
     # User Choice Over Assignment Algorithm to Use
     assign_choice = int(input('\n0: Random\n1: First - Fit\n2: Least Used\nSelect Assignment Function to Run: '))
 
     if assign_choice == 0:
         # Run Random Lightpath Assignment
-        randomAssignment(new_paths, 5)
+        randomAssignment(new_paths, l)
 
     elif assign_choice == 1:
         # Run First - Fit Lightpath Assignment
-        firstFitAssign(new_paths, 5)
+        firstFitAssign(new_paths, l)
 
