@@ -483,7 +483,7 @@ def leastUsedAssign(new_paths, lightpaths):
 
                         break
 
-                    else:   # TODO: Change Logic so that Only Elements Present to available_lightpaths[source] are Considered When Searching for Minimum
+                    else:
                         inner_break_flag = 0
                         while len(attempts) < limit:
                             selection = 0
